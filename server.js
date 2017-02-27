@@ -37,7 +37,7 @@ app.post('/stories', (req, res) => {
 
 //GET
 app.get('/stories', (req, res)=>{
-  Story.find().exec()
+  Story.find().sort({title: -1}).exec()
   .then(stories => {
     res.json({
       Stories: stories.map( currentStory => currentStory.apiRepr())
@@ -49,7 +49,18 @@ app.get('/stories', (req, res)=>{
   });
 });
 
+app.get('/stories/:id', (req, res)=>{
+  Story.findById(req.params.id).exec()
+  .then(desiredStory => res.json(desiredStory.apiRepr()))
+  .catch(err => {
+    console.error(err);
+    res.status(500).json({message: 'Something went wrong!!!!!!!!!!!!!!'});
+  });
+});
+
 //PUT
+
+
 
 //DELETE
 
