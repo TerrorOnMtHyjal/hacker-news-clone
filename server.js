@@ -39,8 +39,8 @@ app.post('/stories', (req, res) => {
 app.get('/stories', (req, res)=>{
   Story.find().sort({title: -1}).exec()
   .then(stories => {
-    res.json({
-      Stories: stories.map( currentStory => currentStory.apiRepr())
+    res.status(200).json({
+      Stories: stories.map(currentStory => currentStory.apiRepr())
     });
   })
   .catch(err => {
@@ -51,7 +51,7 @@ app.get('/stories', (req, res)=>{
 
 app.get('/stories/:id', (req, res)=>{
   Story.findById(req.params.id).exec()
-  .then(desiredStory => res.json(desiredStory.apiRepr()))
+  .then(desiredStory => res.status(200).json(desiredStory.apiRepr()))
   .catch(err => {
     console.error(err);
     res.status(500).json({message: 'Something went wrong!!!!!!!!!!!!!!'});
@@ -59,6 +59,14 @@ app.get('/stories/:id', (req, res)=>{
 });
 
 //PUT
+app.put('/stories/:id', (req, res)=>{
+  Story.findByIdAndUpdate(req.params.id, {$inc : {votes : 0}}, {new : true}).exec()
+  .then(updatedStory => res.status(200).json({updatedStory}))
+  .catch(err => {
+    console.error(err);
+    res.status(500).json({message: 'Something went wrong!!!!!!!!!!!!!!'});
+  });
+});
 
 
 
