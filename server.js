@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-
+const {Story} = require('./models');
 mongoose.Promise = global.Promise;
 
 const DATABASE_URL = process.env.DATABASE_URL ||
