@@ -12,7 +12,25 @@ const PORT = process.env.PORT || 8080;
 const app = express();
 app.use(bodyParser.json());
 
-// API endpoints go here
+app.post('/stories', (req, res) => {
+  const requiredFields = ['url', 'title'];
+  for (let i=0; i< requiredFields.length; i++){
+    const field = requiredFields[i];
+    if(!(field in req.body)){
+      console.error(`Missing ${field} in request`);
+      return res.status(400);
+    }
+  }
+  Story
+    .create({
+      title:req.body.title,
+      url:req.body.url})
+    .then(
+      story => res.status(201).json(story.apiRepr()))
+    .catch(err => {
+      console.error(err);
+    });
+});
 
 let server;
 function runServer() {
