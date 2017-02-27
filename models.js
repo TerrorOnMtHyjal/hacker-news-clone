@@ -15,5 +15,5 @@ storySchema.methods.apiRepr = function(){
   };
 };
 
-const Story = mongoose.model('Storie', storySchema);
+const Story = mongoose.model('Story', storySchema);
 module.exports = {Story};
