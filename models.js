@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
 const storySchema = mongoose.Schema({
-  title: { type: String, required: true},
-  url: String,
-  votes:{ type: Number, default: 0}
+  title: { type: String, required: "Title is required!" },
+  url: { type: String, required: "URL is required!" },
+  votes: { type: Number, default: 0 }
 });
 
 storySchema.methods.apiRepr = function(){
@@ -13,8 +13,7 @@ storySchema.methods.apiRepr = function(){
     votes: this.votes,
     id: this._id
   };
-}
+};
 
 const Story = mongoose.model('Storie', storySchema);
-
 module.exports = {Story};
