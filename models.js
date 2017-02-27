@@ -21,3 +21,7 @@ storySchema.methods.apiRepr = function(){
     id: this._id
   };
 }
+
+const Story = mongoose.model('Storie', storySchema);
+
+module.exports = {Story};
