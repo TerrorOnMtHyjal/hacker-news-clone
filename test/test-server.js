@@ -14,14 +14,14 @@ chai.use(chaiHttp);
 function generateStory(){
   return {
     title: faker.lorem.sentence(),
-    url: faker.url
+    url: faker.internet.url()
   };
 }
 function seedData() {
     console.info('Seeding data');
     const dummyData = [];
     for (let i = 1; i<=10; i++){
-      generateStory();
+      dummyData.push(generateStory());
     }
     return Story.insertMany(dummyData);
 }
@@ -66,7 +66,7 @@ describe('Hacker News API', function() {
       })
       .then(function(story){
         story.title.should.equal(newStory.title);
-        story.url.shold.equal(newStory.url);
+        story.url.should.equal(newStory.url);
       });
     });
   });
