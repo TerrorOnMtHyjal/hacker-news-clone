@@ -144,7 +144,6 @@ describe('Hacker News API', function() {
         })
         .then(function(res) {
           res.should.have.status(200);
-
           return Story.findById(capturedStoryToUpvote.id).exec();
         })
         .then(function(upvotedStory){
