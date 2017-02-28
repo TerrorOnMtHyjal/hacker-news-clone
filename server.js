@@ -45,7 +45,7 @@ app.get('/stories', (req, res)=>{
   })
   .catch(err => {
     console.error(err);
-    res.status(500).json({message: 'Something went wrong!!!!!!!!!!!!!!'});
+    res.status(500).json({message: 'Something went wrong when GETTING all stories!'});
   });
 });
 
@@ -54,19 +54,32 @@ app.get('/stories/:id', (req, res)=>{
   .then(desiredStory => res.status(200).json(desiredStory.apiRepr()))
   .catch(err => {
     console.error(err);
-    res.status(500).json({message: 'Something went wrong!!!!!!!!!!!!!!'});
+    res.status(500).json({message: 'Something went wrong when GETTING one story!'});
   });
 });
 
 //PUT
-app.put('/stories/:id', (req, res)=>{
-  Story.findByIdAndUpdate(req.params.id, {$inc : {votes : 0}}, {new : true}).exec()
+app.put('/stories/upvote/:id', (req, res)=>{
+  Story.findByIdAndUpdate(req.params.id, {$inc : {votes : 1}}, {new : true}).exec()
   .then(updatedStory => res.status(200).json({updatedStory}))
   .catch(err => {
     console.error(err);
-    res.status(500).json({message: 'Something went wrong!!!!!!!!!!!!!!'});
+    res.status(500).json({message: 'Something went wrong when PUTTING an upvote!'});
   });
 });
+
+app.put('/stories/:id', (req, res)=>{
+  const toUpdate = {};
+  Object.keys(req.body).forEach(key => toUpdate[key] = req.body[key]);
+  Story.findByIdAndUpdate(req.params.id, {$set : toUpdate}, {new : true}).exec()
+  .then(updatedStory => res.status(200).json({updatedStory}))
+  .catch(err => {
+    console.error(err);
+    res.status(500).json({message: 'Something went wrong when PUTTING a update!'});
+  });
+});
+
+
 
 //DELETE
 

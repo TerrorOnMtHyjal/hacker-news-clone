@@ -48,6 +48,8 @@ describe('Hacker News API', function() {
     return closeServer();
   });
 
+//----------------------------------------------***POST TESTS***--------------------------------------------------//
+
   describe('POST endpoint', function() {
     it('should post story', function () {
       const newStory = generateStory();
@@ -70,6 +72,8 @@ describe('Hacker News API', function() {
       });
     });
   });
+
+//----------------------------------------------***GET TESTS***--------------------------------------------------//
   describe('GET all stories', function() {
     it('should return all stories', function() {
       let capturedRes;
@@ -87,6 +91,8 @@ describe('Hacker News API', function() {
       });
     });
   });
+
+//----------------------------------------------***PUT TESTS***--------------------------------------------------//  
 
   describe('PUT update', function() {
     it('should update story', function(){
@@ -114,5 +120,25 @@ describe('Hacker News API', function() {
     });
   });
 
+  describe('PUT update', function() {
+    it('should upvote a story once', function(){
+      let capturedStoryToUpvote = {};
 
+      return Story
+        .findOne().exec()
+        .then(function(storyToUpvote){
+          capturedStoryToUpvote.votes = storyToUpvote.votes;
+          capturedStoryToUpvote.id = storyToUpvote.id;
+          return chai.request(app)
+            .put(`/stories/upvote/${storyToUpvote.id}`);
+        })
+        .then(function(res) {
+          res.should.have.status(200);
+          return Story.findById(capturedStoryToUpvote.id).exec();
+        })
+        .then(function(upvotedStory){
+          upvotedStory.votes.should.equal(capturedStoryToUpvote.votes += 1);
+        });
+    });
+  });
 });
