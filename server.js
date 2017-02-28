@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 
 //----------------------------------------------***END POINTS***--------------------------------------------------//
 
-//POST
+//--------------------------------------------------POST
 app.post('/stories', (req, res) => {
   const requiredFields = ['url', 'title'];
   for (let i=0; i< requiredFields.length; i++){
@@ -35,7 +35,8 @@ app.post('/stories', (req, res) => {
     });
 });
 
-//GET
+//-------------------------------------------------GET
+
 app.get('/stories', (req, res)=>{
   Story.find().sort({votes: -1}).limit(20).exec()
   .then(stories => {
@@ -58,7 +59,8 @@ app.get('/stories/:id', (req, res)=>{
   });
 });
 
-//PUT
+//-------------------------------------------------PUT
+
 app.put('/stories/upvote/:id', (req, res)=>{
   Story.findByIdAndUpdate(req.params.id, {$inc : {votes : 1}}, {new : true}).exec()
   .then(updatedStory => res.status(200).json({updatedStory}))
@@ -87,7 +89,7 @@ app.put('/stories/:id', (req, res)=>{
 
 
 
-//DELETE
+//----------------------------------------------------DELETE
 
 //--------------------------------------------***SERVER CONTROLLERS***--------------------------------------------//
 
