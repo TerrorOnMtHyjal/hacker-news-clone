@@ -37,7 +37,7 @@ app.post('/stories', (req, res) => {
 
 //GET
 app.get('/stories', (req, res)=>{
-  Story.find().sort({title: -1}).exec()
+  Story.find().sort({votes: -1}).limit(20).exec()
   .then(stories => {
     res.status(200).json({
       Stories: stories.map(currentStory => currentStory.apiRepr())
@@ -71,6 +71,12 @@ app.put('/stories/upvote/:id', (req, res)=>{
 app.put('/stories/:id', (req, res)=>{
   const toUpdate = {};
   Object.keys(req.body).forEach(key => toUpdate[key] = req.body[key]);
+
+  if(toUpdate.hasOwnProperty('votes')){
+      delete toUpdate.votes;
+      console.log("deleted votes you cheater!");
+  }
+
   Story.findByIdAndUpdate(req.params.id, {$set : toUpdate}, {new : true}).exec()
   .then(updatedStory => res.status(200).json({updatedStory}))
   .catch(err => {

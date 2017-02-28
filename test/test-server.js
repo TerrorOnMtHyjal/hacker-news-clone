@@ -86,7 +86,6 @@ describe('Hacker News API', function() {
         return Story.count();
       })
       .then(function(count){
-        console.log('count: ', count);
         capturedRes.body.Stories.should.have.length.of(count);
       });
     });
