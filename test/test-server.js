@@ -17,19 +17,24 @@ function generateStory(){
     url: faker.internet.url()
   };
 }
+
 function seedData() {
     console.info('Seeding data');
     const dummyData = [];
     for (let i = 1; i<=10; i++){
       dummyData.push(generateStory());
     }
+    
     return Story.insertMany(dummyData);
 }
 
 function tearDownDb() {
   console.info('Deleting database');
+
   return mongoose.connection.dropDatabase();
 }
+
+//-------------------------------------------**BEFORE AND AFTER**--------------------------------------------------//
 
 describe('Hacker News API', function() {
   before(function() {
@@ -53,6 +58,7 @@ describe('Hacker News API', function() {
   describe('POST endpoint', function() {
     it('should post story', function () {
       const newStory = generateStory();
+
       return chai.request(app)
       .post('/stories')
       .send(newStory)
@@ -64,6 +70,7 @@ describe('Hacker News API', function() {
         res.body.id.should.not.be.null;
         res.body.title.should.equal(newStory.title);
         res.body.url.should.equal(newStory.url);
+
         return Story.findById(res.body.id);
       })
       .then(function(story){
@@ -74,6 +81,7 @@ describe('Hacker News API', function() {
   });
 
 //----------------------------------------------***GET TESTS***--------------------------------------------------//
+
   describe('GET all stories', function() {
     it('should return all stories', function() {
       let capturedRes;
@@ -83,6 +91,7 @@ describe('Hacker News API', function() {
         capturedRes = res;
         capturedRes.should.have.status(200);
         capturedRes.body.Stories.should.have.length.of.at.least(1);
+
         return Story.count();
       })
       .then(function(count){
@@ -103,6 +112,7 @@ describe('Hacker News API', function() {
         .findOne().exec()
         .then(function(storyToUpdate){
           updatedStoryDetails.id = storyToUpdate.id;
+
           return chai.request(app)
             .put( `/stories/${storyToUpdate.id}`)
             .send(updatedStoryDetails);
@@ -110,6 +120,7 @@ describe('Hacker News API', function() {
         .then(function(res) {
           res.should.have.status(200);
           res.should.be.json;
+
           return Story.findById(updatedStoryDetails.id).exec();
         })
         .then(function(story){
@@ -133,6 +144,7 @@ describe('Hacker News API', function() {
         })
         .then(function(res) {
           res.should.have.status(200);
+
           return Story.findById(capturedStoryToUpvote.id).exec();
         })
         .then(function(upvotedStory){

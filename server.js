@@ -1,11 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-
-const app = express();
 const {Story} = require('./models');
+
 const DATABASE_URL = process.env.DATABASE_URL || global.DATABASE_URL || 'mongodb://localhost/hn-api';
 const PORT = process.env.PORT || 8080;
+const app = express();
 
 mongoose.Promise = global.Promise;
 app.use(bodyParser.json());
